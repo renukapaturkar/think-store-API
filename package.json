@@ -1,0 +1,22 @@
+{
+  "name": "elysian-api",
+  "version": "1.0.0",
+  "description": "API Server for Ecommerce - elysian",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/renukapaturkar/elysian-api.git"
+  },
+  "author": "Renuka Paturkar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/renukapaturkar/elysian-api/issues"
+  },
+  "homepage": "https://github.com/renukapaturkar/elysian-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
