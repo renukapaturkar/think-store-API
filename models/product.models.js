@@ -4,7 +4,7 @@ const {Schema} = mongoose;
 
 const productsSchema = new Schema({
     title: {type:String, required: "cannot enter details without field 'title', please enter details of product" },
-    image_url: {type: mongoose.SchemaTypes.Url, required: "cannot enter details without field 'image_url', please enter details of product"},
+    image_url: {type:String, required: "cannot enter details without field 'image_url', please enter details of product"},
     price: {type: Number, required: "cannot enter details without field 'price', please enter details of product"},
     book_format: {type: Array, required: "cannot enter details without field 'book_format', please enter details of product"},
     genre: {type:String, required : "cannot enter details without field 'genre', please enter details of product" },  
