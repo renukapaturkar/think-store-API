@@ -23,7 +23,7 @@ router.route('/')
         const NewProduct = new Product(product)
         // console.log(product)
         const savedProduct = await NewProduct.save()
-        // console.log(savedProduct)
+        res.json({success:true, savedProduct})
 
     }catch(error){
         res.json({success: false, errorMessage:"cannot save products to database, something went wrong!"})

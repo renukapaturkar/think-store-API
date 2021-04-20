@@ -2,7 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const {Schema} = mongoose;
 
-const productsSchema = new Schema({
+const ProductsSchema = new Schema({
     title: {type:String, required: "cannot enter details without field 'title', please enter details of product" },
     image_url: {type:String, required: "cannot enter details without field 'image_url', please enter details of product"},
     price: {type: Number, required: "cannot enter details without field 'price', please enter details of product"},
@@ -15,7 +15,7 @@ const productsSchema = new Schema({
 
 });
 
-const Product = mongoose.model('product', productsSchema);
+const Product = mongoose.model('product', ProductsSchema);
 
 
 module.exports = {Product}
