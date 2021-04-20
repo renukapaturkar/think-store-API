@@ -11,7 +11,7 @@ const ProductsSchema = new Schema({
     author: {type:Array, required: "cannot enter details without field 'author', please enter details of product"},
     language: {type:Array, required: "cannot enter details without field 'language', please enter details of product."},
     delivery: {type: String, required: "cannot enter details without field 'delivery', please enter details of product."},
-    description: {type: String, minLength: [20,"cannot enter details without field 'delivery', please enter details of product."]}
+    description: {type: String, minLength: [5,"cannot enter details without field 'delivery', please enter details of product."]}
 
 });
 
