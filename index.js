@@ -6,8 +6,8 @@ const cors = require('cors')
 
 
 const app = express()
-// app.use(express.json())
-app.use(bodyParser.json())
+app.use(express.json())
+
 app.use(cors())
 const port = 3000;
 const products = require('./routes/products.router.js')
