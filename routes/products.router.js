@@ -4,7 +4,7 @@ const {Product} = require('../models/product.models')
 const extend =  require('lodash')
 const productsList = require('../data/productsList.data.js')
 
-
+Product.insertArray(productsList)
 
 router.route('/')
 .get(async(req, res)=>{
