@@ -11,12 +11,14 @@ app.use(express.json())
 app.use(cors())
 const port = 3000;
 const products = require('./routes/products.router.js')
+const carts = require('./routes/cart.router.js')
 
 const { initializeDBconnection } = require("./db/db.connect.js")
 
 initializeDBconnection()
 
 app.use('/products',products)
+app.use('/carts', carts)
 
 app.get('/', (req, res) => res.json({hello: "world"}))
 
