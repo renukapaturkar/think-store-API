@@ -91,7 +91,8 @@ router.route('/:cartId/:productId')
     try{
         const {cartId, productId} = req.params
         const updatedCartData = await Cart.findById(cartId).updateOne({'productsArray._id': productId}, {$pull:{ productsArray: {"productId": productId}}})
-        res.json({success: true, CartData : updatedCartData})
+        const data2 = await Cart.findById(cartId).populate("productsArray.productId")
+        res.json({success: true, CartData : data2})
     }catch(error){
         res.status(500).json({success: false,error: "Internal Server Error", errorMessage: error.message})
     }
