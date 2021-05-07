@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const {Product} = require('../models/product.models')
 const extend =  require('lodash')
-const productsList = require('../data/productsList.data.js')
+
 
 // Product.insertMany(productsList)
 

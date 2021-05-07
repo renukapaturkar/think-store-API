@@ -1,7 +1,4 @@
 const express = require('express')
-const path = require('path')
-const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
 const cors = require('cors')
 
 
@@ -12,6 +9,7 @@ app.use(cors())
 const port = 3000;
 const products = require('./routes/products.router.js')
 const carts = require('./routes/cart.router.js')
+const wishlists = require('./routes/wishlist.router.js')
 
 const { initializeDBconnection } = require("./db/db.connect.js")
 
@@ -19,6 +17,7 @@ initializeDBconnection()
 
 app.use('/products',products)
 app.use('/carts', carts)
+app.use('/wishlists', wishlists)
 
 app.get('/', (req, res) => res.json({hello: "world"}))
 
