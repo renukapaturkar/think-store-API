@@ -78,7 +78,7 @@ router
       await data.wishlistArray.push(wishlistArray);
       await data.save();
 
-      const dataSaved = await (await Wishlist.findById(wishlistId)).populated(
+      const dataSaved = await Wishlist.findById(wishlistId).populated(
         "wishlistArray.productId"
       );
       res.json({ success: true, WishlistData: dataSaved });
