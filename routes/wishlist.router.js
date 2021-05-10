@@ -42,4 +42,54 @@ router
     }
   });
 
+router
+  .route("/:wishlistId")
+  .get(async (req, res) => {
+    try {
+      const { wishlistId } = req.params;
+      const data = await (await Wishlist.findById(wishlistId)).populate(
+        "wishlistArray.productId"
+      );
+      if (!data) {
+        res
+          .status(400)
+          .json({
+            success: false,
+            message: "The wishlist data could not be found,",
+          });
+      }
+      res.json({ success: true, WishlistData: data });
+    } catch (error) {
+      res
+        .status(500)
+        .json({
+          success: false,
+          message: "Internal Server Error",
+          errorMessage: error.message,
+        });
+    }
+  })
+
+  .post(async (req, res) => {
+    try {
+      const { wishlistArray } = req.body;
+      const { wishlistId } = req.params;
+      const data = await Wishlist.findById(wishlistId);
+      await data.wishlistArray.push(wishlistArray);
+      await data.save();
+
+      const dataSaved = await (await Wishlist.findById(wishlistId)).populated(
+        "wishlistArray.productId"
+      );
+      res.json({ success: true, WishlistData: dataSaved });
+    } catch (error) {
+      res
+        .status(500)
+        .json({
+          success: false,
+          message: "Internal Server Error",
+          errorMessage: error.message,
+        });
+    }
+  });
 module.exports = router;

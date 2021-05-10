@@ -54,13 +54,11 @@ router
       }
       res.json({ success: true, CartData: data });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message: "Internal Server Error",
-          errorMessage: error.message,
-        });
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        errorMessage: error.message,
+      });
     }
   })
 
@@ -77,13 +75,11 @@ router
 
       res.json({ success: true, CartData: data2 });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message: "Internal Server error",
-          errorMessage: error.message,
-        });
+      res.status(500).json({
+        success: false,
+        message: "Internal Server error",
+        errorMessage: error.message,
+      });
     }
   });
 
@@ -103,13 +99,11 @@ router
       console.log(data2);
       res.json({ success: true, CartData: data2 });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          error: "Internal Server Error",
-          errorMessage: error.message,
-        });
+      res.status(500).json({
+        success: false,
+        error: "Internal Server Error",
+        errorMessage: error.message,
+      });
     }
   })
   .delete(async (req, res) => {
@@ -124,13 +118,11 @@ router
       );
       res.json({ success: true, CartData: data2 });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          error: "Internal Server Error",
-          errorMessage: error.message,
-        });
+      res.status(500).json({
+        success: false,
+        error: "Internal Server Error",
+        errorMessage: error.message,
+      });
     }
   });
 
