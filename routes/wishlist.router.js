@@ -51,22 +51,18 @@ router
         "wishlistArray.productId"
       );
       if (!data) {
-        res
-          .status(400)
-          .json({
-            success: false,
-            message: "The wishlist data could not be found,",
-          });
+        res.status(400).json({
+          success: false,
+          message: "The wishlist data could not be found,",
+        });
       }
       res.json({ success: true, WishlistData: data });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message: "Internal Server Error",
-          errorMessage: error.message,
-        });
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        errorMessage: error.message,
+      });
     }
   })
 
@@ -75,7 +71,7 @@ router
       const { wishlistArray } = req.body;
       const { wishlistId } = req.params;
       const data = await Wishlist.findById(wishlistId);
-      console.log(data)
+      console.log(data);
       await data.wishlistArray.push(wishlistArray);
       await data.save();
 
@@ -84,13 +80,32 @@ router
       );
       res.json({ success: true, WishlistData: dataSaved });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message: "Internal Server Error",
-          errorMessage: error.message,
-        });
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        errorMessage: error.message,
+      });
     }
   });
+
+router.route("/:wishlistId/:productId").delete(async (req, res) => {
+  try {
+    const { cartId, productId } = req.params;
+    const updatedWishlist = await Wishlist.findById(wishlistId).updateOne(
+      { "wishlistArray._id": productId },
+      { $pull: { wishlistArray: { productId: productId } } }
+    );
+    const data = await Wishlist.findById(wishlistId).populate(
+      "wishlistArray.productId"
+    );
+    res.json({ success: true, WishlistData: data });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: "Internal Server Error",
+      errorMessage: error.message,
+    });
+  }
+});
+
 module.exports = router;
