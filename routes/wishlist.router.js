@@ -90,7 +90,7 @@ router
 
 router.route("/:wishlistId/:productId").delete(async (req, res) => {
   try {
-    const { cartId, productId } = req.params;
+    const { wishlistId, productId } = req.params;
     const updatedWishlist = await Wishlist.findById(wishlistId).updateOne(
       { "wishlistArray._id": productId },
       { $pull: { wishlistArray: { productId: productId } } }
