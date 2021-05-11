@@ -75,10 +75,11 @@ router
       const { wishlistArray } = req.body;
       const { wishlistId } = req.params;
       const data = await Wishlist.findById(wishlistId);
+      console.log(data)
       await data.wishlistArray.push(wishlistArray);
       await data.save();
 
-      const dataSaved = await Wishlist.findById(wishlistId).populated(
+      const dataSaved = await Wishlist.findById(wishlistId).populate(
         "wishlistArray.productId"
       );
       res.json({ success: true, WishlistData: dataSaved });
