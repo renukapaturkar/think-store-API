@@ -17,8 +17,9 @@ const wishlists = require('./routes/wishlist.router.js')
 const { initializeDBconnection } = require("./db/db.connect.js")
 
 initializeDBconnection()
-app.use(authRouter);
+
 app.use('/products',products)
+app.use(authRouter);
 app.use('/carts', authVerify, carts)
 app.use('/wishlists',authVerify, wishlists)
 
