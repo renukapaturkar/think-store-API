@@ -24,10 +24,11 @@ router
   .post(async (req, res) => {
     try {
       const cartProduct = req.body;
-      const newItemInCart = new Cart(cartProduct);
+      const user = req.user;
+      const newItemInCart = new Cart({user: user._id, productsArray: [{_id: cartProduct.productsArray._id}]})
       const savedCartProduct = await newItemInCart.save();
       const data2 = await Cart.findById(savedCartProduct._id).populate(
-        "productsArray.productId"
+        "productsArray._id"
       );
       res.json({ success: true, CartData: data2 });
     } catch (error) {
@@ -44,8 +45,10 @@ router
   .get(async (req, res) => {
     try {
       const { cartId } = req.params;
+      const user = req.user;
+
       const data = await Cart.findById(cartId).populate(
-        "productsArray.productId"
+        "productsArray._id"
       );
       if (!data) {
         res
@@ -64,16 +67,14 @@ router
 
   .post(async (req, res) => {
     try {
-      const { productsArray } = req.body;
+      const {productsArray} = req.body;
+      console.log(productsArray)
       const { cartId } = req.params;
-      const data = await Cart.findById(cartId);
-      await data.productsArray.push(productsArray);
-      await data.save();
-      const data2 = await Cart.findById(cartId).populate(
-        "productsArray.productId"
-      );
-
-      res.json({ success: true, CartData: data2 });
+      const user = req.user;
+      const data = await Cart.findOneAndUpdate({user: user._id}, {$addToSet: {productsArray: productsArray}})
+      console.log(data)
+      const savedData = await Cart.findById(cartId).populate("productsArray._id")
+      res.json({ success: true, CartData: savedData });
     } catch (error) {
       res.status(500).json({
         success: false,
@@ -88,15 +89,17 @@ router
   .post(async (req, res) => {
     try {
       const { cartId, productId } = req.params;
-      const { quantity } = req.body;
-      await Cart.findById(cartId).updateOne(
+      const quantity  = req.body;
+      console.log(quantity)
+      const user = req.user;
+      await Cart.findOne({user: user._id}).updateOne(
         { "productsArray._id": productId },
         { $set: { "productsArray.$.quantity": quantity } }
       );
       const data2 = await Cart.findById(cartId).populate(
-        "productsArray.productId"
+        "productsArray._id"
       );
-      console.log(data2);
+      console.log("data2",data2);
       res.json({ success: true, CartData: data2 });
     } catch (error) {
       res.status(500).json({
@@ -109,12 +112,13 @@ router
   .delete(async (req, res) => {
     try {
       const { cartId, productId } = req.params;
-      const updatedCartData = await Cart.findById(cartId).updateOne(
+      const user = req.user;
+      const updatedCartData = await Cart.findOne({user: user._id}).updateOne(
         { "productsArray._id": productId },
-        { $pull: { productsArray: { productId: productId } } }
+        { $pull: { productsArray: { _id: productId } } }
       );
       const data2 = await Cart.findById(cartId).populate(
-        "productsArray.productId"
+        "productsArray._id"
       );
       res.json({ success: true, CartData: data2 });
     } catch (error) {

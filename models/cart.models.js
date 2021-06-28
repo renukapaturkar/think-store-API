@@ -4,7 +4,8 @@ const {Product} = require('./product.models')
 const {Schema} = mongoose;
 
 const CartSchema = new Schema({
-    productsArray: [{_id:String, productId:{type: Schema.Types.ObjectId, ref:'Product'},quantity:Number}]
+    user:{type: Schema.Types.ObjectId, ref: "User"},
+    productsArray: [{_id:{type: Schema.Types.ObjectId, ref:'Product'},quantity:Number}]
 })
 
 const Cart = mongoose.model('Cart', CartSchema)
