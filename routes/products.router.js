@@ -13,7 +13,7 @@ router.route('/')
         const product = await Product.find({})
         res.json({success:true, product})
     }catch(error){
-        res.json({success: false, errorMessage: "Cannot get the products, something went wrong!"})
+        res.json({success: false, errorMessage: "Cannot get the products, something went wrong!", errMesage:error.message})
     }
 })
 
