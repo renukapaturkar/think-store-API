@@ -6,8 +6,8 @@ const {authVerify} = require('./middleware/authVerify');
 
 
 const app = express()
-app.use(cors());
 app.use(express.json())
+app.use(cors())
 
 
 const products = require('./routes/products.router.js')
