@@ -3,6 +3,9 @@ const router = express.Router();
 const { Cart } = require("../models/cart.models.js");
 
 
+
+
+
 router
   .route("/")
   .get(async (req, res) => {
@@ -28,7 +31,7 @@ router
       const user = req.user;
       const newItemInCart = new Cart({user: user._id, productsArray: [{_id: cartProduct.productsArray._id}]})
       const savedCartProduct = await newItemInCart.save();
-      const data2 = await Cart.findById(savedCartProduct._id).populate(
+      const data2 = await Cart.findbyId(savedCartProduct._id).populate(
         "productsArray._id"
       );
       res.json({ success: true, CartData: data2 });
@@ -45,10 +48,10 @@ router
   .route("/:cartId")
   .get(async (req, res) => {
     try {
-      const { cartId } = req.params;
+      
       const user = req.user;
 
-      const data = await Cart.findById(cartId).populate(
+      const data = await Cart.findOne(user._id).populate(
         "productsArray._id"
       );
       if (!data) {
@@ -74,7 +77,7 @@ router
       const user = req.user;
       const data = await Cart.findOneAndUpdate({user: user._id}, {$addToSet: {productsArray: productsArray}})
       console.log(data)
-      const savedData = await Cart.findById(cartId).populate("productsArray._id")
+      const savedData = await Cart.findOne(user._id).populate("productsArray._id")
       res.json({ success: true, CartData: savedData });
     } catch (error) {
       res.status(500).json({
@@ -97,7 +100,7 @@ router
         { "productsArray._id": productId },
         { $set: { "productsArray.$.quantity": quantity } }
       );
-      const data2 = await Cart.findById(cartId).populate(
+      const data2 = await Cart.findOne(user._id).populate(
         "productsArray._id"
       );
       console.log("data2",data2);
@@ -118,7 +121,7 @@ router
         { "productsArray._id": productId },
         { $pull: { productsArray: { _id: productId } } }
       );
-      const data2 = await Cart.findById(cartId).populate(
+      const data2 = await Cart.findOne(user._id).populate(
         "productsArray._id"
       );
       res.json({ success: true, CartData: data2 });
