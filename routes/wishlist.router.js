@@ -6,14 +6,14 @@ router
   .route("/")
   .get(async (req, res) => {
     try {
-      const {userId} = req.user;
-      const data = await Wishlist.find({})
+      const user = req.user;
+      const data = await Wishlist.findOne({user: user._id})
       if (!data) {
         res
           .status(500)
           .json({ success: false, message: "Wishlist data not found" });
       } else {
-        res.json({ success: true, WishlistData: data });
+        res.status(200).json({ success: true, WishlistData: data });
       }
     } catch (error) {
       res.status(500).json({
@@ -28,11 +28,13 @@ router
     try {
       
       const wishlistProduct = req.body;
+      console.log("wishlistProduct",wishlistProduct)
       const user = req.user;
       const newItem = new Wishlist({user: user._id, wishlistArray:[{_id:wishlistProduct.wishlistArray._id}]});
       const savedItem = await newItem.save();
-      const data = await Wishlist.findById(savedItem._id).populate("wishlistArray._id")
-      res.json({ success: true, WishlistData: data });
+      const data = await Wishlist.findOne({user: user._id}).populate("wishlistArray._id")
+      console.log("data line 36 ", data)
+      res.status(200).json({ success: true, WishlistData: data });
     } catch (error) {
       res.status(500).json({
         success: false,
@@ -47,17 +49,18 @@ router
   .get(async (req, res) => {
     try {
       const {wishlistId} = req.params;
+      console.log("wishlistId",wishlistId);
       const user = req.user;
-      console.log(wishlistId, user._id)
-      const data = await Wishlist.findById(wishlistId).populate("wishlistArray._id")
-      console.log(data)
+      console.log(user._id)
+      const data = await Wishlist.findOne({user: user._id}).populate("wishlistArray._id")
+      console.log("line 56",data)
       if (!data) {
         res.status(400).json({
           success: false,
           message: "The wishlist data could not be found,",
         });
       }
-      res.json({ success: true, WishlistData: data });
+      res.status(200).json({ success: true, WishlistData: data });
     } catch (error) {
       res.status(500).json({
         success: false,
@@ -71,10 +74,13 @@ router
     try {
       const { wishlistArray } = req.body;
       const {wishlistId} = req.params;
+      console.log("line 77 wihslistArray and wishlistId", wishlistArray, wishlistId);
       const user = req.user;
+      console.log("line 79", user)
       const data = await Wishlist.findOneAndUpdate({user: user._id}, {$addToSet: {wishlistArray: wishlistArray}})
-      const savedData = await Wishlist.findById(wishlistId).populate("wishlistArray._id")
-      res.json({success: true, WishlistData: savedData})
+      const savedData = await Wishlist.findOne({user: user._id}).populate("wishlistArray._id")
+      console.log("savedData", savedData)
+      res.status(200).json({success: true, WishlistData: savedData})
     } catch (error) {
       res.status(500).json({
         success: false,
@@ -87,10 +93,13 @@ router
 router.route("/:wishlistId/:productId").delete(async (req, res) => {
   try {
     const { wishlistId, productId } = req.params;
+    console.log("line 96", wishlistId, "productId->", productId)
     const user = req.user;
+    console.log(user)
     const data = await Wishlist.findOneAndUpdate({user: user._id}, {$pull: {wishlistArray: {_id: productId}}})
-    const savedData = await Wishlist.findById(wishlistId).populate("wishlistArray._id")
-    res.json({ success: true, WishlistData: savedData });
+    const savedData = await Wishlist.findOne({user: user._id}).populate("wishlistArray._id")
+    console.log("line 101, savedData", savedData)
+    res.status(200).json({ success: true, WishlistData: savedData });
   } catch (error) {
     res.status(500).json({
       success: false,

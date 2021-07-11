@@ -2,18 +2,14 @@ const express = require("express");
 const router = express.Router();
 const { Cart } = require("../models/cart.models.js");
 
-
-
-
-
 router
   .route("/")
   .get(async (req, res) => {
     try {
       const user = req.user;
-      console.log(user)
-      const data = await Cart.findOne({user: user._id}).populate("productsArray._id");
-      console.log(data)
+      const data = await Cart.findOne({ user: user._id }).populate(
+        "productsArray._id"
+      );
       if (!data) {
         res
           .status(400)
@@ -31,15 +27,21 @@ router
   .post(async (req, res) => {
     try {
       const cartProduct = req.body;
-
       const user = req.user;
-
-      const newItemInCart = new Cart({user: user._id, productsArray: [{_id: cartProduct.productsArray._id, quantity: cartProduct.productsArray.quantity}]})
+      const newItemInCart = new Cart({
+        user: user._id,
+        productsArray: [
+          {
+            _id: cartProduct.productsArray._id,
+            quantity: cartProduct.productsArray.quantity,
+          },
+        ],
+      });
       const savedCartProduct = await newItemInCart.save();
-      const data2 = await Cart.findOne({user:user._id}).populate(
+      const data2 = await Cart.findOne({ user: user._id }).populate(
         "productsArray._id"
       );
-      res.json({ success: true, CartData: data2 });
+      res.status(200).json({ success: true, CartData: data2 });
     } catch (error) {
       res.status(500).json({
         success: false,
@@ -53,10 +55,8 @@ router
   .route("/:cartId")
   .get(async (req, res) => {
     try {
-      
       const user = req.user;
-
-      const data = await Cart.findOne({user:user._id}).populate(
+      const data = await Cart.findOne({ user: user._id }).populate(
         "productsArray._id"
       );
       if (!data) {
@@ -64,7 +64,7 @@ router
           .status(400)
           .json({ success: false, message: "product could not be found" });
       }
-      res.json({ success: true, CartData: data });
+      res.status(200).json({ success: true, CartData: data });
     } catch (error) {
       res.status(500).json({
         success: false,
@@ -76,15 +76,19 @@ router
 
   .post(async (req, res) => {
     try {
-      const {productsArray} = req.body;
-      
-      const { cartId } = req.params;
+      const { productsArray } = req.body;
       const user = req.user;
-      const data = await Cart.findOneAndUpdate({user: user._id}, {$addToSet: {productsArray: productsArray}},{new: true})
+      const data = await Cart.findOneAndUpdate(
+        { user: user._id },
+        { $addToSet: { productsArray: productsArray } },
+        { new: true }
+      );
 
-      const savedData = await Cart.findOne({user: user._id}).populate("productsArray._id")
+      const savedData = await Cart.findOne({ user: user._id }).populate(
+        "productsArray._id"
+      );
 
-      res.json({ success: true, CartData: savedData });
+      res.status(200).json({ success: true, CartData: savedData });
     } catch (error) {
       res.status(500).json({
         success: false,
@@ -99,19 +103,16 @@ router
   .post(async (req, res) => {
     try {
       const { productId } = req.params;
-      console.log("productId",productId)
-      const {quantity}  = req.body;
-      console.log("quantity", quantity)
+      const { quantity } = req.body;
       const user = req.user;
-      await Cart.findOne({user: user._id}).updateOne(
+      await Cart.findOne({ user: user._id }).updateOne(
         { "productsArray._id": productId },
         { $set: { "productsArray.$.quantity": quantity } }
       );
-      const data2 = await Cart.findOne({user:user._id}).populate(
+      const data2 = await Cart.findOne({ user: user._id }).populate(
         "productsArray._id"
       );
-      console.log("data2",data2);
-      res.json({ success: true, CartData: data2 });
+      res.status(200).json({ success: true, CartData: data2 });
     } catch (error) {
       res.status(500).json({
         success: false,
@@ -122,16 +123,15 @@ router
   })
   .delete(async (req, res) => {
     try {
-      const { cartId, productId } = req.params;
+      const { productId } = req.params;
+      console.log(productId)
       const user = req.user;
-      const updatedCartData = await Cart.findOne({user: user._id}).updateOne(
+      const updatedCartData = await Cart.findOne({ user: user._id }).updateOne(
         { "productsArray._id": productId },
         { $pull: { productsArray: { _id: productId } } }
       );
-      const data2 = await Cart.findOne(user._id).populate(
-        "productsArray._id"
-      );
-      res.json({ success: true, CartData: data2 });
+      const data2 = await Cart.findOne({user:user._id}).populate("productsArray._id");
+      res.status(200).json({ success: true, CartData: data2 });
     } catch (error) {
       res.status(500).json({
         success: false,
