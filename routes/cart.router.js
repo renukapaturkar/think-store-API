@@ -19,7 +19,7 @@ router
           .status(400)
           .json({ success: false, message: "Items were not found!" });
       } else {
-        res.json({ success: true, CartData: data });
+        res.status(200).json({ success: true, CartData: data });
       }
     } catch (error) {
       res
