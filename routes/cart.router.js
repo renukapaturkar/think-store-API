@@ -10,8 +10,10 @@ router
   .route("/")
   .get(async (req, res) => {
     try {
-      const user = req.body
+      const user = req.user;
+      console.log(user)
       const data = await Cart.findOne({user: user._id}).populate("productsArray._id");
+      console.log(data)
       if (!data) {
         res
           .status(400)
