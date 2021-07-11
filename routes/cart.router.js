@@ -11,7 +11,7 @@ router
   .get(async (req, res) => {
     try {
       const user = req.body
-      const data = await Cart.findOne({user: user._id});
+      const data = await Cart.findOne({user: user._id}).populate("productsArray._id");
       if (!data) {
         res
           .status(400)
