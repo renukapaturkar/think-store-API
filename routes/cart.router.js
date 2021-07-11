@@ -10,7 +10,8 @@ router
   .route("/")
   .get(async (req, res) => {
     try {
-      const data = await Cart.find({});
+      const user = req.body
+      const data = await Cart.findOne({user: user._id});
       if (!data) {
         res
           .status(400)
