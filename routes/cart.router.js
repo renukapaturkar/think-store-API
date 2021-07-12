@@ -131,6 +131,7 @@ router
         { $pull: { productsArray: { _id: productId } } }
       );
       const data2 = await Cart.findOne({user:user._id}).populate("productsArray._id");
+      console.log(data2)
       res.status(200).json({ success: true, CartData: data2 });
     } catch (error) {
       res.status(500).json({
