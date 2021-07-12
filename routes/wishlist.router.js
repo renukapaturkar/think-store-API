@@ -7,7 +7,7 @@ router
   .get(async (req, res) => {
     try {
       const user = req.user;
-      const data = await Wishlist.findOne({user: user._id})
+      const data = await Wishlist.findOne({user: user._id}).populate("wishlistArray._id")
       if (!data) {
         res
           .status(500)
